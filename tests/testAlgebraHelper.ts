@@ -3,8 +3,8 @@ import { Bit } from "../src/models/bit";
 import { AlgebraHelper } from "../src/helpers/algebraHelper";
 import { TestCommon } from "./testCommon";
 
-describe("Bitmap helpers", () => {
-  it("should properly calculate distance in between two pixels", () => {
+describe("Algebra helpers", () => {
+  it("should properly calculate distance in between two bits", () => {
     const p1 = new Bit(10, 10, 0);
     const p2 = new Bit(10, 1, 0);
 
