@@ -1,4 +1,4 @@
-import { IBit } from "../model/interfaces/ibit";
+import { IBit } from "../models/interfaces/ibit";
 
 export class AlgebraHelper {
   /**
@@ -20,9 +20,19 @@ export class AlgebraHelper {
 
     let min: number = Number.MAX_SAFE_INTEGER;
     for (const whitePixel of whiteBitList) {
-      min = Math.min(min, bit.distanceOf(whitePixel));
+      min = Math.min(min, AlgebraHelper.calculateDistance(bit, whitePixel));
     }
 
     return min;
+  }
+
+  /**
+   * Calculates the distance in between two Bits.
+   * @param bit1 Bit 1
+   * @param bit2 Bit 2
+   * @returns Returns the distance in between p1 and p2 according to the formula d = |bit1.x - bit2.x| + |bit1.y - bit2.y|
+   */
+  static calculateDistance(bit1: IBit, bit2: IBit): number {
+    return Math.abs(bit1.x - bit2.x) + Math.abs(bit1.y - bit2.y);
   }
 }

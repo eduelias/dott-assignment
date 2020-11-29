@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 import * as readline from "readline";
-import { AlgebraHelper } from "./helpers/algebra";
-import { Bitmap } from "./model/bitmap";
+import { AlgebraHelper } from "./helpers/algebraHelper";
+import { Bitmap } from "./models/bitmap";
 
 /**
  * Class that carries the logit for each test case
@@ -67,6 +67,25 @@ export class Case extends EventEmitter {
   }
 
   /**
+   * Start lines processing after sizes were inputed
+   * @param sizesArray array with height x width of the bitmap
+   */
+  private processLines(sizesArray: any) {
+    const height = sizesArray[0];
+    const width = sizesArray[1];
+    const bitmap = new Bitmap(width, height);
+
+    this.emit(
+      "write",
+      `Please, add bitmap lines (max ${width} columns)\n[Row 1 of ${height}]:`
+    );
+
+    this.rlInterface.on("line", (line) =>
+      this.onLine({ line, height, width, bitmap })
+    );
+  }
+
+  /**
    *
    * Function called each line the user inputs the bitmap rows
    *
@@ -78,7 +97,8 @@ export class Case extends EventEmitter {
    *    - bitmap: the bitmap itself
    * }
    */
-  private onLine({ currentLine, line, height, width, bitmap }): any {
+  private onLine({ line, height, width, bitmap }): any {
+    const currentLine = () => Object.keys(bitmap.map).length;
     const lineSplit = line
       .trim()
       .split(" ")
@@ -89,34 +109,13 @@ export class Case extends EventEmitter {
       this.emit("end");
     }
 
-    bitmap.addLine({ y: currentLine, line: lineSplit });
+    bitmap.addLine({ y: currentLine(), line: lineSplit });
 
-    currentLine++;
-    if (currentLine === height) {
+    if (currentLine() === height) {
       this.emit("write", `--- Output for case #${this.number + 1} --- \n`);
       this.calculateDistances(bitmap);
       return this.emit("end");
     }
-    this.emit("write", `[Row ${currentLine + 1} of ${height}]:`);
-  }
-
-  /**
-   * Start lines processing after sizes were inputed
-   * @param sizesArray array with height x width of the bitmap
-   */
-  private processLines(sizesArray: any) {
-    const height = sizesArray[0];
-    const width = sizesArray[1];
-    const bitmap = new Bitmap(width, height);
-    let currentLine = 0;
-
-    this.emit(
-      "write",
-      `Please, add bitmap lines (max ${width} columns)\n[Row 1 of ${height}]:`
-    );
-
-    this.rlInterface.on("line", (line) =>
-      this.onLine({ currentLine, line, height, width, bitmap })
-    );
+    this.emit("write", `[Row ${currentLine() + 1} of ${height}]:`);
   }
 }

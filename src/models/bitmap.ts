@@ -6,7 +6,7 @@ export class Bitmap {
   public map: IBitMap;
   private whiteBits: Array<IBit> = [];
 
-  constructor(private width: number, private height: number) {
+  constructor(public width: number, public height: number) {
     this.map = {};
   }
 
@@ -20,13 +20,21 @@ export class Bitmap {
     let currentColumn = 0;
     for (let color of line) {
       const bit = new Bit(currentColumn, y, color);
-      if (bit.color === 1) {
-        this.whiteBits.push(bit);
-      }
-      this.map[y] = this.map[y] || {};
-      this.map[y][bit.x] = bit;
+      this.addBit(bit);
       currentColumn++;
     }
+  }
+
+  /**
+   * Adds a bit {x, y, color} to the bitmap
+   * @param bit bit to be added
+   */
+  public addBit(bit: IBit): void {
+    if (bit.color === 1) {
+      this.whiteBits.push(bit);
+    }
+    this.map[bit.y] = this.map[bit.y] || {};
+    this.map[bit.y][bit.x] = bit;
   }
 
   /**
