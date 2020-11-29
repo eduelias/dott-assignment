@@ -44,7 +44,7 @@ export class Case extends EventEmitter {
   }
 
   /**
-   *
+   * Function called back after the question is asked on stdin
    * @param mapSizes
    */
   private onRun(mapSizes): void {
@@ -66,6 +66,18 @@ export class Case extends EventEmitter {
     this.processLines(sizesArray);
   }
 
+  /**
+   *
+   * Function called each line the user inputs the bitmap rows
+   *
+   * @param param0 {
+   *    - currentLine: line counter to keep track of Y coordinate
+   *    - line: current line being processed
+   *    - height: current bitmap max height
+   *    - width: current bitmap max width
+   *    - bitmap: the bitmap itself
+   * }
+   */
   private onLine({ currentLine, line, height, width, bitmap }): any {
     const lineSplit = line
       .trim()
@@ -88,14 +100,20 @@ export class Case extends EventEmitter {
     this.emit("write", `[Row ${currentLine + 1} of ${height}]:`);
   }
 
+  /**
+   * Start lines processing after sizes were inputed
+   * @param sizesArray array with height x width of the bitmap
+   */
   private processLines(sizesArray: any) {
     const height = sizesArray[0];
     const width = sizesArray[1];
     const bitmap = new Bitmap(width, height);
     let currentLine = 0;
 
-    this.emit("write", `Please, add bitmap lines (max ${width} columns):\n`);
-    this.emit("write", `[Row ${currentLine + 1} of ${height}]:`);
+    this.emit(
+      "write",
+      `Please, add bitmap lines (max ${width} columns)\n[Row 1 of ${height}]:`
+    );
 
     this.rlInterface.on("line", (line) =>
       this.onLine({ currentLine, line, height, width, bitmap })

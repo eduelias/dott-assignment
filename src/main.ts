@@ -8,6 +8,9 @@ const rlInterface = readline.createInterface({
 
 const runs: Array<Case> = [];
 
+/**
+ * Actual runner, shifts, run, theres a next? run again.
+ */
 function runNext(): void {
   rlInterface.removeAllListeners();
   const next = runs.shift();
@@ -17,12 +20,19 @@ function runNext(): void {
   rlInterface.close();
 }
 
+/**
+ * Error handler, closes the interface and exits the app
+ * @param message
+ */
 function terminateBadly(message?: string): void {
   if (message) process.stdout.write(message);
   rlInterface.close();
   process.exit(1);
 }
 
+/**
+ * Asks the user for the number of test cases to run
+ */
 rlInterface.question(
   "Please, enter the number of runs (1 <= t <= 1000):",
   (stringNumberOfRuns) => {
