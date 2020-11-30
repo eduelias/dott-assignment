@@ -2,14 +2,15 @@
   "name": "dott-bitmap",
   "version": "0.0.1",
   "description": "Dott assignment",
-  "main": "index.js",
+  "main": "src/main.js",
+  "repository": "git@github.com:eduelias/dott-assignment.git",
   "scripts": {
     "start": "node build/main.js",
     "prestart": "npm run build",
     "build": "tsc",
     "test": "mocha -r ts-node/register tests/*.ts"
   },
-  "author": "",
+  "author": "Eduardo Elias Saleh",
   "license": "MIT",
   "devDependencies": {
     "@types/chai": "^4.2.14",
